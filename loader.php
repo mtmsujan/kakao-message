@@ -11,6 +11,7 @@
 include_once QATA_MESSAGE_PLUGIN_PATH . '/admin/class-qata-message-post-type.php';
 include_once QATA_MESSAGE_PLUGIN_PATH . '/admin/qsms-metabox.php';
 include_once QATA_MESSAGE_PLUGIN_PATH . '/admin/get-update-wc-order-statuses.php';
+include_once QATA_MESSAGE_PLUGIN_PATH . '/admin/qsms-settings-page.php';
 
 //  Require api call file
 require_once QATA_MESSAGE_PLUGIN_PATH . '/admin/call-api-status-change.php';

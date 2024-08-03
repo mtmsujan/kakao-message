@@ -38,7 +38,7 @@ class Create_Update_Order {
 
         $recipient_no  = $order->get_billing_phone();
         $order_number  = $order->get_order_number();
-        $order_content = 'Your order details here'; // Customize this as needed
+        $order_content = 'Your order details here';
         $order_total   = $order->get_total();
 
         $payload = json_encode( [

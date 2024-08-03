@@ -57,12 +57,14 @@ if ( class_exists( 'CSF' ) ) {
                 'type'   => 'repeater',
                 'title'  => 'Parameters',
                 'fields' => array(
+                    // Parameter key field
                     array(
                         'id'          => 'qsms_param_key',
                         'type'        => 'text',
                         'title'       => 'Parameter Key',
                         'placeholder' => 'Parameter Key',
                     ),
+                    // Parameter value field
                     array(
                         'id'          => 'qsms_param_value',
                         'type'        => 'select',

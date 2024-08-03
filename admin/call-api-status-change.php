@@ -12,46 +12,74 @@ class Create_Update_Order {
 
     public function create_order( $order_id ) {
         // Create Order
-        $create_order = $this->call_api( $order_id, 'Create Order' );
+        $create_order = $this->call_api( 'Create Order ' . $order_id );
         // Put the api response to log file.
         $this->put_api_response_data( 'Create Order ' . $create_order );
     }
 
     public function changed_order( $order_id, $old_status, $new_status, $order ) {
 
-        /**
-         * Calls the API based on the current status.
-         * For example: If the status is 'hold', retrieves the 'on-hold' custom post type message and calls the API.
-         * Similar logic applies to other status values.
-         */
+        // Get all data from custom post type
+        $posts = $this->get_posts()->posts;
 
-        // Change order status
-        $change_order_status = $this->call_api( $order_id, 'Change Order Status' );
-        // Put the api response to log file.
-        $this->put_api_response_data( 'Change Order Status ' . $change_order_status );
+        // define selected post
+        $selected_post = null;
+
+        // Loop through the posts and return this post which status = $new_status
+        foreach ( $posts as $post ) {
+            if ( strtolower( $post->post_title ) === $new_status ) {
+                $selected_post = $post;
+                break;
+            }
+        }
+
     }
 
-    public function call_api( $order_id, $action ) {
+    /**
+     * Get all posts
+     */
+    public function get_posts() {
+        $args = array(
+            'post_type'   => 'qata_message',
+            'numberposts' => -1,
+        );
 
+        $posts = new \WP_Query( $args );
+        return $posts;
+    }
+
+    public function call_api( $order_id, $message ) {
         // Get the order
         $order = wc_get_order( $order_id );
 
-        $recipient_no  = $order->get_billing_phone();
-        $order_number  = $order->get_order_number();
-        $order_content = 'Your order details here';
-        $order_total   = $order->get_total();
+        $recipient_no = $order->get_billing_phone();
+        $order_data   = $this->get_order_data( $order );
+
+        // Prepare template parameters
+        $template_parameters = [];
+
+        // Get post type data
+        $post_type_data = get_post_meta( $message->ID, '_qata_message', true );
+        $this->put_api_response_data( 'Post Type Data ' . $post_type_data );
+
+        $qsms_params = unserialize( $post_type_data );
+        $this->put_api_response_data( 'Params ' . json_encode( $qsms_params ) );
+
+        foreach ( $qsms_params as $param ) {
+            $param_key                       = $param['qsms_param_key'];
+            $param_value                     = $order_data[$param['qsms_param_value']] ?? '';
+            $template_parameters[$param_key] = $param_value;
+        }
+
+        $this->put_api_response_data( 'Template Parameters ' . json_encode( $template_parameters ) );
 
         $payload = json_encode( [
             'senderKey'     => '10454ae1766dd86366d113b1eb2f6234b65df2ab',
-            'templateCode'  => '1002', // Replace with your own template code
+            'templateCode'  => get_post_meta( $message->ID, 'qsms_template_code', true ),
             'recipientList' => [
                 [
                     'recipientNo'       => $recipient_no,
-                    'templateParameter' => [
-                        'ORDER_NUMBER'  => $order_number,
-                        'ORDER_CONTENT' => $order_content,
-                        'ORDER_TOTAL'   => $order_total,
-                    ],
+                    'templateParameter' => $template_parameters,
                 ],
             ],
         ] );
@@ -85,6 +113,49 @@ class Create_Update_Order {
 
         curl_close( $curl );
         return $response;
+    }
+
+    public function get_order_data( $order ) {
+        return [
+            'order_number'        => $order->get_order_number(),
+            'order_total'         => $order->get_total(),
+            'billing_first_name'  => $order->get_billing_first_name(),
+            'billing_last_name'   => $order->get_billing_last_name(),
+            'billing_address_1'   => $order->get_billing_address_1(),
+            'billing_address_2'   => $order->get_billing_address_2(),
+            'billing_city'        => $order->get_billing_city(),
+            'billing_state'       => $order->get_billing_state(),
+            'billing_postcode'    => $order->get_billing_postcode(),
+            'billing_country'     => $order->get_billing_country(),
+            'billing_email'       => $order->get_billing_email(),
+            'billing_phone'       => $order->get_billing_phone(),
+            'shipping_first_name' => $order->get_shipping_first_name(),
+            'shipping_last_name'  => $order->get_shipping_last_name(),
+            'shipping_address_1'  => $order->get_shipping_address_1(),
+            'shipping_address_2'  => $order->get_shipping_address_2(),
+            'shipping_city'       => $order->get_shipping_city(),
+            'shipping_state'      => $order->get_shipping_state(),
+            'shipping_postcode'   => $order->get_shipping_postcode(),
+            'shipping_country'    => $order->get_shipping_country(),
+            'customer_note'       => $order->get_customer_note(),
+            'payment_method'      => $order->get_payment_method(),
+            'transaction_id'      => $order->get_transaction_id(),
+            'order_date'          => $order->get_date_created()->date( 'Y-m-d H:i:s' ),
+            'order_status'        => $order->get_status(),
+            'shipping_method'     => $order->get_shipping_method(),
+            'shipping_total'      => $order->get_shipping_total(),
+            'shipping_tax'        => $order->get_shipping_tax(),
+            'discount_total'      => $order->get_discount_total(),
+            'discount_tax'        => $order->get_discount_tax(),
+            'cart_tax'            => $order->get_cart_tax(),
+            'total_tax'           => $order->get_total_tax(),
+            'order_key'           => $order->get_order_key(),
+            'customer_id'         => $order->get_customer_id(),
+            'order_currency'      => $order->get_currency(),
+            'prices_include_tax'  => $order->get_prices_include_tax(),
+            'customer_ip_address' => $order->get_customer_ip_address(),
+            'customer_user_agent' => $order->get_customer_user_agent(),
+        ];
     }
 
     public function put_api_response_data( $data ) {

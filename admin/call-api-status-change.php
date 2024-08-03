@@ -13,6 +13,26 @@ class Create_Update_Order {
 
     // Handle WooCommerce thank you action to create an order
     public function create_order( $order_id ) {
+        // Get all custom post type data
+        $posts = $this->get_posts()->posts;
+
+        $this->put_api_response_data( 'Posts ' . json_encode( $posts ) );
+
+        // Define selected post based on new order status
+        $selected_post = null;
+
+        // Loop through posts to find the one matching the new status
+        foreach ( $posts as $post ) {
+            if ( strtolower( $post->post_title ) === 'processing' ) {
+                $selected_post = $post;
+                break;
+            }
+        }
+
+        $this->put_api_response_data( 'Selected Post ' . json_encode( $selected_post ) );
+        die();
+
+
         // Create Order via API
         // $create_order = $this->call_api( $order_id, null );
         // Log API response
@@ -22,11 +42,7 @@ class Create_Update_Order {
     // Handle WooCommerce order status change
     public function changed_order( $order_id, $old_status, $new_status, $order ) {
         // Get all custom post type data
-        $posts         = $this->get_posts()->posts;
-        $order_content = $this->get_posts()->post_content;
-
-        // Save order content to WordPress options table
-        update_option( '_order_content_' . $order_id, $order_content );
+        $posts = $this->get_posts()->posts;
 
         // Define selected post based on new order status
         $selected_post = null;
@@ -38,6 +54,12 @@ class Create_Update_Order {
                 break;
             }
         }
+
+        // Get order content from selected post
+        $order_content = $selected_post->post_content ?? '';
+
+        // Save order content to WordPress options table
+        update_option( '_order_content_' . $order_id, $order_content );
 
         if ( $selected_post ) {
             // Call API with selected post data
@@ -104,7 +126,7 @@ class Create_Update_Order {
         curl_setopt_array(
             $curl,
             [
-                CURLOPT_URL            => 'https://api-alimtalk.cloud.toast.com/alimtalk/v2.3/appkeys/XEqo1OsqojDOR94y/messages',
+                CURLOPT_URL            => 'https://api-alimtalk.cloud.toast.com.bd/alimtalk/v2.3/appkeys/XEqo1OsqojDOR94y/messages',
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING       => '',
                 CURLOPT_MAXREDIRS      => 10,

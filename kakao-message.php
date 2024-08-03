@@ -73,6 +73,7 @@ register_deactivation_hook( __FILE__, 'deactivate_qata_message' );
  * admin-specific hooks, and public-facing site hooks.
  */
 require plugin_dir_path( __FILE__ ) . 'includes/class-qata-message.php';
+require plugin_dir_path( __FILE__ ) . 'includes/lib/codestar-framework/codestar-framework.php';
 
 // Require loader.php file
 require_once QATA_MESSAGE_PLUGIN_PATH . '/loader.php';

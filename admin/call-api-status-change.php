@@ -30,8 +30,6 @@ class Create_Update_Order {
         }
 
         $this->put_api_response_data( 'Selected Post ' . json_encode( $selected_post ) );
-        die();
-
 
         // Create Order via API
         // $create_order = $this->call_api( $order_id, null );
@@ -49,11 +47,19 @@ class Create_Update_Order {
 
         // Loop through posts to find the one matching the new status
         foreach ( $posts as $post ) {
-            if ( strtolower( $post->post_title ) === $new_status ) {
+            // Retrieve metabox status value
+            $metabox_values = get_post_meta( $post->ID, '_qata_message', true );
+            // Get post type data
+            $message_status = $metabox_values['qsms_order_status'] ?? '';
+
+            // Compare the selected post status with new status
+            if ( $message_status === $new_status ) {
                 $selected_post = $post;
                 break;
             }
         }
+
+        // $this->put_api_response_data( 'Selected Post ' . json_encode( $selected_post ) );
 
         // Get order content from selected post
         $order_content = $selected_post->post_content ?? '';
@@ -65,7 +71,7 @@ class Create_Update_Order {
             // Call API with selected post data
             $call_api = $this->call_api( $order_id, $selected_post );
             // Log API response
-            // $this->put_api_response_data( 'Call API ' . $call_api );
+            $this->put_api_response_data( 'Call API ' . $call_api );
         }
     }
 
@@ -126,7 +132,7 @@ class Create_Update_Order {
         curl_setopt_array(
             $curl,
             [
-                CURLOPT_URL            => 'https://api-alimtalk.cloud.toast.com.bd/alimtalk/v2.3/appkeys/XEqo1OsqojDOR94y/messages',
+                CURLOPT_URL            => 'https://api-alimtalk.cloud.toast.com/alimtalk/v2.3/appkeys/XEqo1OsqojDOR94y/messages',
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING       => '',
                 CURLOPT_MAXREDIRS      => 10,

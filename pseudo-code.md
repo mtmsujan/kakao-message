@@ -9,3 +9,6 @@
         - Order status
         - Order content etc etc.
 
+
+
+1. Loop though custom post type and every loop check status value saved on dropdown option and compare new status on order status

@@ -13,7 +13,7 @@ class Settings_Page {
 
     public function register_admin_menu() {
         add_submenu_page(
-            'woocommerce',
+            'edit.php?post_type=qata_message',
             'Kakao Settings',
             'Kakao Settings',
             'manage_options',

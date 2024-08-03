@@ -47,7 +47,7 @@ class Qata_SMS_Post_Type {
             'hierarchical'        => false,
             'public'              => true,
             'show_ui'             => true,
-            'show_in_menu'        => 'woocommerce',
+            // 'show_in_menu'        => 'woocommerce',
             'menu_position'       => 50,
             'menu_icon'           => 'dashicons-email',
             'show_in_admin_bar'   => true,

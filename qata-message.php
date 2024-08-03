@@ -13,7 +13,7 @@
  * @package           Qata_Message
  *
  * @wordpress-plugin
- * Plugin Name:       Qata Message
+ * Plugin Name:       Kakao SMS
  * Plugin URI:        https://github.com/shahjalal132/qata-message
  * Description:       Send message to customer service
  * Version:           1.0.0

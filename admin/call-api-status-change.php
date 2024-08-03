@@ -33,6 +33,13 @@ class Create_Update_Order {
             }
         }
 
+        if ( $selected_post ) {
+            // Call API
+            $call_api = $this->call_api( $order_id, $selected_post );
+            // Put the api response to log file.
+            $this->put_api_response_data( 'Call API ' . $call_api );
+        }
+
     }
 
     /**
@@ -52,19 +59,20 @@ class Create_Update_Order {
         // Get the order
         $order = wc_get_order( $order_id );
 
+        // Get billing phone number for recipient no
         $recipient_no = $order->get_billing_phone();
+        // Retrieve order data
         $order_data   = $this->get_order_data( $order );
 
         // Prepare template parameters
         $template_parameters = [];
 
         // Get post type data
-        $post_type_data = get_post_meta( $message->ID, '_qata_message', true );
-        $this->put_api_response_data( 'Post Type Data ' . $post_type_data );
+        $metabox_values = get_post_meta( $message->ID, '_qata_message', true );
+        // Get repeater field data
+        $qsms_params    = $metabox_values['qsms_params'];
 
-        $qsms_params = unserialize( $post_type_data );
-        $this->put_api_response_data( 'Params ' . json_encode( $qsms_params ) );
-
+        // Loop for generate template parameters
         foreach ( $qsms_params as $param ) {
             $param_key                       = $param['qsms_param_key'];
             $param_value                     = $order_data[$param['qsms_param_value']] ?? '';

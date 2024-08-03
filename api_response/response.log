@@ -28,3 +28,23 @@ Selected Post
     "filter": "raw"
 } - 2024-08-03 07:29:04
 
+Post Type Data 
+{
+    "qsms_order_status": "completed",
+    "qsms_template_code": "1001",
+    "qsms_params": [
+        {
+            "qsms_param_key": "CUSTOMER_NAME",
+            "qsms_param_value": "billing_first_name"
+        },
+        {
+            "qsms_param_key": "CUSTOMER_PHONE",
+            "qsms_param_value": "billing_phone"
+        }
+    ]
+} - 2024-08-03 07:35:51
+
+Template Parameters {"ORDER_TOTAL":"18.00"} - 2024-08-03 07:46:47
+
+Template Parameters {"CUSTOMER_NAME":"Mr","CUSTOMER_PHONE":"","CUSTOMER_EMAIL":"ffshahjalal@gmail.com","CUSTOMER_COUNTRY":"US"} - 2024-08-03 08:34:28
+

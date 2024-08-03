@@ -29,7 +29,7 @@ class Create_Update_Order {
             }
         }
 
-        $this->put_api_response_data( 'Selected Post ' . json_encode( $selected_post ) );
+        // $this->put_api_response_data( 'Selected Post ' . json_encode( $selected_post ) );
 
         // Create Order via API
         // $create_order = $this->call_api( $order_id, null );
@@ -115,9 +115,13 @@ class Create_Update_Order {
             $template_parameters[$param_key] = $param_value;
         }
 
+        // Get api credentials
+        $api_key    = get_option( 'kakao_api_key' ) ?? '';
+        $sender_key = get_option( 'kakao_sender_key' ) ?? '';
+
         // Prepare payload for API request
         $payload = json_encode( [
-            'senderKey'     => '10454ae1766dd86366d113b1eb2f6234b65df2ab',
+            'senderKey'     => $sender_key,
             'templateCode'  => $template_code,
             'recipientList' => [
                 [
@@ -132,7 +136,7 @@ class Create_Update_Order {
         curl_setopt_array(
             $curl,
             [
-                CURLOPT_URL            => 'https://api-alimtalk.cloud.toast.com/alimtalk/v2.3/appkeys/XEqo1OsqojDOR94y/messages',
+                CURLOPT_URL            => 'https://api-alimtalk.cloud.toast.com/alimtalk/v2.3/appkeys/' . urlencode( $api_key ) . '/messages',
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING       => '',
                 CURLOPT_MAXREDIRS      => 10,

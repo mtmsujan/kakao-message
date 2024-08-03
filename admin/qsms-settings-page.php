@@ -63,13 +63,13 @@ class Settings_Page {
                 <div class="input-fields">
                     <div class="api_key">
                         <label for="api_key"><?php esc_html_e( 'API Key:', 'qata-message' ) ?></label>
-                        <input type="text" class="widefat kakao-input" placeholder="API Key" name="api_key" id="api_key"
+                        <input type="password" class="widefat kakao-input" placeholder="API Key" name="api_key" id="api_key"
                             value="<?php echo esc_attr( get_option( 'kakao_api_key' ) ); ?>">
                     </div>
 
                     <div class="sender_key">
                         <label for="sender_key"><?php esc_html_e( 'Sender Key:', 'qata-message' ) ?></label>
-                        <input type="text" class="widefat kakao-input" placeholder="Sender Key" name="sender_key"
+                        <input type="password" class="widefat kakao-input" placeholder="Sender Key" name="sender_key"
                             id="sender_key" value="<?php echo esc_attr( get_option( 'kakao_sender_key' ) ); ?>">
                     </div>
                 </div>

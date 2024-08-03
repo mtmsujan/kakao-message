@@ -5,27 +5,33 @@ class Create_Update_Order {
         $this->setup_hooks();
     }
 
+    // Setup hooks for WooCommerce actions
     public function setup_hooks() {
         add_action( 'woocommerce_thankyou', [ $this, 'create_order' ] );
         add_action( 'woocommerce_order_status_changed', [ $this, 'changed_order' ], 10, 4 );
     }
 
+    // Handle WooCommerce thank you action to create an order
     public function create_order( $order_id ) {
-        // Create Order
-        $create_order = $this->call_api( 'Create Order ' . $order_id );
-        // Put the api response to log file.
-        $this->put_api_response_data( 'Create Order ' . $create_order );
+        // Create Order via API
+        // $create_order = $this->call_api( $order_id, null );
+        // Log API response
+        // $this->put_api_response_data( 'Create Order ' . $create_order );
     }
 
+    // Handle WooCommerce order status change
     public function changed_order( $order_id, $old_status, $new_status, $order ) {
+        // Get all custom post type data
+        $posts         = $this->get_posts()->posts;
+        $order_content = $this->get_posts()->post_content;
 
-        // Get all data from custom post type
-        $posts = $this->get_posts()->posts;
+        // Save order content to WordPress options table
+        update_option( '_order_content_' . $order_id, $order_content );
 
-        // define selected post
+        // Define selected post based on new order status
         $selected_post = null;
 
-        // Loop through the posts and return this post which status = $new_status
+        // Loop through posts to find the one matching the new status
         foreach ( $posts as $post ) {
             if ( strtolower( $post->post_title ) === $new_status ) {
                 $selected_post = $post;
@@ -34,17 +40,14 @@ class Create_Update_Order {
         }
 
         if ( $selected_post ) {
-            // Call API
+            // Call API with selected post data
             $call_api = $this->call_api( $order_id, $selected_post );
-            // Put the api response to log file.
-            $this->put_api_response_data( 'Call API ' . $call_api );
+            // Log API response
+            // $this->put_api_response_data( 'Call API ' . $call_api );
         }
-
     }
 
-    /**
-     * Get all posts
-     */
+    // Retrieve all custom post type data
     public function get_posts() {
         $args = array(
             'post_type'   => 'qata_message',
@@ -55,35 +58,39 @@ class Create_Update_Order {
         return $posts;
     }
 
+    // Call external API with order and message data
     public function call_api( $order_id, $message ) {
-        // Get the order
+        // Get WooCommerce order object
         $order = wc_get_order( $order_id );
 
-        // Get billing phone number for recipient no
+        // Get billing phone number for recipient number
         $recipient_no = $order->get_billing_phone();
-        // Retrieve order data
-        $order_data   = $this->get_order_data( $order );
 
-        // Prepare template parameters
+        // Retrieve order data
+        $order_data = $this->get_order_data( $order );
+
+        // Prepare template parameters from metabox values
         $template_parameters = [];
 
         // Get post type data
         $metabox_values = get_post_meta( $message->ID, '_qata_message', true );
         // Get repeater field data
-        $qsms_params    = $metabox_values['qsms_params'];
+        $qsms_params = $metabox_values['qsms_params'];
 
-        // Loop for generate template parameters
+        // Get template code
+        $template_code = $metabox_values['qsms_template_code'];
+
+        // Loop through params to generate template parameters
         foreach ( $qsms_params as $param ) {
             $param_key                       = $param['qsms_param_key'];
             $param_value                     = $order_data[$param['qsms_param_value']] ?? '';
             $template_parameters[$param_key] = $param_value;
         }
 
-        $this->put_api_response_data( 'Template Parameters ' . json_encode( $template_parameters ) );
-
+        // Prepare payload for API request
         $payload = json_encode( [
             'senderKey'     => '10454ae1766dd86366d113b1eb2f6234b65df2ab',
-            'templateCode'  => get_post_meta( $message->ID, 'qsms_template_code', true ),
+            'templateCode'  => $template_code,
             'recipientList' => [
                 [
                     'recipientNo'       => $recipient_no,
@@ -92,11 +99,12 @@ class Create_Update_Order {
             ],
         ] );
 
+        // Initialize cURL
         $curl = curl_init();
         curl_setopt_array(
             $curl,
             [
-                CURLOPT_URL            => 'https://api-alimtalk.cloud.toast.com.bd/alimtalk/v2.3/appkeys/XEqo1OsqojDOR94y/messages',
+                CURLOPT_URL            => 'https://api-alimtalk.cloud.toast.com/alimtalk/v2.3/appkeys/XEqo1OsqojDOR94y/messages',
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING       => '',
                 CURLOPT_MAXREDIRS      => 10,
@@ -112,6 +120,7 @@ class Create_Update_Order {
             ]
         );
 
+        // Execute cURL and handle errors
         $response = curl_exec( $curl );
         if ( curl_errno( $curl ) ) {
             $error_msg = curl_error( $curl );
@@ -123,10 +132,16 @@ class Create_Update_Order {
         return $response;
     }
 
+    // Get order data from WooCommerce order object
     public function get_order_data( $order ) {
+        // Get order ID
+        $order_id = $order->get_id();
+        // Get order content from WordPress options table
+        $order_content = get_option( '_order_content_' . $order_id ) ?? '';
         return [
             'order_number'        => $order->get_order_number(),
             'order_total'         => $order->get_total(),
+            'order_content'       => $order_content,
             'billing_first_name'  => $order->get_billing_first_name(),
             'billing_last_name'   => $order->get_billing_last_name(),
             'billing_address_1'   => $order->get_billing_address_1(),
@@ -166,6 +181,7 @@ class Create_Update_Order {
         ];
     }
 
+    // Log API response data to a file
     public function put_api_response_data( $data ) {
         // Ensure directory exists to store response data
         $directory = QATA_MESSAGE_PLUGIN_PATH . '/api_response/';
@@ -191,4 +207,5 @@ class Create_Update_Order {
     }
 }
 
+// Instantiate the class to set up hooks
 new Create_Update_Order();

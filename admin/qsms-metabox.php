@@ -29,7 +29,7 @@ if ( class_exists( 'CSF' ) ) {
         $status_options[$status_key] = $status_label;
     }
 
-    // Generate order data
+    // Generate order data array
     $order_data = array(
         'order_number'        => 'Order Number',
         'order_total'         => 'Order Total',

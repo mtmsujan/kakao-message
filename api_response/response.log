@@ -44,7 +44,9 @@ Post Type Data
     ]
 } - 2024-08-03 07:35:51
 
-Template Parameters {"ORDER_TOTAL":"18.00"} - 2024-08-03 07:46:47
+Template Code 1002 - 2024-08-03 09:25:21
 
-Template Parameters {"CUSTOMER_NAME":"Mr","CUSTOMER_PHONE":"","CUSTOMER_EMAIL":"ffshahjalal@gmail.com","CUSTOMER_COUNTRY":"US"} - 2024-08-03 08:34:28
+Template Parameters {"ORDER_NUMBER":"66","ORDER_CONTENT":"","ORDER_TOTAL":"18.00"} - 2024-08-03 09:25:21
+
+Call API {"header":{"resultCode":0,"resultMessage":"success","isSuccessful":true},"message":{"requestId":"202408031825235XsjLKIAO60","senderGroupingKey":null,"sendResults":[{"recipientSeq":1,"recipientNo":"09165551212","resultCode":-5000,"resultMessage":"RecipientNo is invalid.","recipientGroupingKey":null}]}} - 2024-08-03 09:25:22
 

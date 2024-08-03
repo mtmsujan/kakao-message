@@ -43,7 +43,7 @@ class Create_Update_Order {
 
         $payload = json_encode( [
             'senderKey'     => '10454ae1766dd86366d113b1eb2f6234b65df2ab',
-            'templateCode'  => '1002',
+            'templateCode'  => '1002', // Replace with your own template code
             'recipientList' => [
                 [
                     'recipientNo'       => $recipient_no,

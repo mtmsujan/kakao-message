@@ -4,3 +4,11 @@ Change Order Status cURL Error: Could not resolve host: api-alimtalk.cloud.toast
 
 Woo order statuses {"wc-pending":"Pending payment","wc-processing":"Processing","wc-on-hold":"On hold","wc-completed":"Completed","wc-cancelled":"Cancelled","wc-refunded":"Refunded","wc-failed":"Failed","wc-checkout-draft":"Draft"} - 2024-08-01 17:22:00
 
+{"pending":"Pending payment","processing":"Processing","on-hold":"On hold","completed":"Completed","cancelled":"Cancelled","refunded":"Refunded","failed":"Failed","checkout-draft":"Draft"} - 2024-08-03 05:15:43
+
+{"pending":"Pending payment","processing":"Processing","on-hold":"On hold","completed":"Completed","cancelled":"Cancelled","refunded":"Refunded","failed":"Failed","checkout-draft":"Draft"} - 2024-08-03 05:15:46
+
+{"pending":"Pending payment","processing":"Processing","on-hold":"On hold","completed":"Completed","cancelled":"Cancelled","refunded":"Refunded","failed":"Failed","checkout-draft":"Draft"} - 2024-08-03 05:16:01
+
+{"pending":"Pending payment","processing":"Processing","on-hold":"On hold","completed":"Completed","cancelled":"Cancelled","refunded":"Refunded","failed":"Failed","checkout-draft":"Draft"} - 2024-08-03 05:16:02
+

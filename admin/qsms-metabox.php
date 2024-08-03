@@ -29,7 +29,48 @@ if ( class_exists( 'CSF' ) ) {
         $status_options[$status_key] = $status_label;
     }
 
-
+    // Generate order data
+    $order_data = array(
+        'order_number'        => 'Order Number',
+        'order_total'         => 'Order Total',
+        'order_content'       => 'Order Content',
+        'billing_first_name'  => 'Billing First Name',
+        'billing_last_name'   => 'Billing Last Name',
+        'billing_address_1'   => 'Billing Address 1',
+        'billing_address_2'   => 'Billing Address 2',
+        'billing_city'        => 'Billing City',
+        'billing_state'       => 'Billing State',
+        'billing_postcode'    => 'Billing Postcode',
+        'billing_country'     => 'Billing Country',
+        'billing_email'       => 'Billing Email',
+        'billing_phone'       => 'Billing Phone',
+        'shipping_first_name' => 'Shipping First Name',
+        'shipping_last_name'  => 'Shipping Last Name',
+        'shipping_address_1'  => 'Shipping Address 1',
+        'shipping_address_2'  => 'Shipping Address 2',
+        'shipping_city'       => 'Shipping City',
+        'shipping_state'      => 'Shipping State',
+        'shipping_postcode'   => 'Shipping Postcode',
+        'shipping_country'    => 'Shipping Country',
+        'customer_note'       => 'Customer Note',
+        'payment_method'      => 'Payment Method',
+        'transaction_id'      => 'Transaction ID',
+        'order_date'          => 'Order Date',
+        'order_status'        => 'Order Status',
+        'shipping_method'     => 'Shipping Method',
+        'shipping_total'      => 'Shipping Total',
+        'shipping_tax'        => 'Shipping Tax',
+        'discount_total'      => 'Discount Total',
+        'discount_tax'        => 'Discount Tax',
+        'cart_tax'            => 'Cart Tax',
+        'total_tax'           => 'Total Tax',
+        'order_key'           => 'Order Key',
+        'customer_id'         => 'Customer ID',
+        'order_currency'      => 'Order Currency',
+        'prices_include_tax'  => 'Prices Include Tax',
+        'customer_ip_address' => 'Customer IP Address',
+        'customer_user_agent' => 'Customer User Agent',
+    );
 
     CSF::createSection( $prefix, array(
         'title'  => 'Message',
@@ -72,7 +113,7 @@ if ( class_exists( 'CSF' ) ) {
                         'type'        => 'select',
                         'title'       => 'Parameter Value',
                         'placeholder' => 'Select a Value',
-                        'options'     => $status_options, // Replace with an order infos like price, phone, addresses etc etc.
+                        'options'     => $order_data,
                     ),
                 ),
             ),

@@ -34,6 +34,9 @@ if ( class_exists( 'CSF' ) ) {
         'order_number'        => 'Order Number',
         'order_total'         => 'Order Total',
         'order_content'       => 'Order Content',
+        'product_name'        => 'Product Name',
+        'product_quantity'    => 'Product Quantity',
+        'tracking_number'     => 'Tracking Number',
         'billing_first_name'  => 'Billing First Name',
         'billing_last_name'   => 'Billing Last Name',
         'billing_address_1'   => 'Billing Address 1',
@@ -100,6 +103,13 @@ if ( class_exists( 'CSF' ) ) {
                 'type'   => 'repeater',
                 'title'  => 'Parameters',
                 'fields' => array(
+                    // Parameter key field
+                    array(
+                        'id'          => 'qsms_custom_content',
+                        'type'        => 'text',
+                        'title'       => 'Content',
+                        'placeholder' => 'Content',
+                    ),
                     // Parameter key field
                     array(
                         'id'          => 'qsms_param_key',

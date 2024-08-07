@@ -71,7 +71,7 @@ class Create_Update_Order {
             // Call API with selected post data
             $call_api = $this->call_api( $order_id, $selected_post );
             // Log API response
-            $this->put_api_response_data( 'Call API ' . $call_api );
+            $this->put_api_response_data( 'Call API: ' . $call_api );
         }
     }
 
@@ -115,6 +115,8 @@ class Create_Update_Order {
             $template_parameters[$param_key] = $param_value;
         }
 
+        $this->put_api_response_data( 'Template Parameters: ' . json_encode( $template_parameters ) );
+
         // Get api credentials
         $api_key    = get_option( 'kakao_api_key' ) ?? '';
         $sender_key = get_option( 'kakao_sender_key' ) ?? '';
@@ -136,7 +138,7 @@ class Create_Update_Order {
         curl_setopt_array(
             $curl,
             [
-                CURLOPT_URL            => 'https://api-alimtalk.cloud.toast.com/alimtalk/v2.3/appkeys/' . urlencode( $api_key ) . '/messages',
+                CURLOPT_URL            => 'https://api-alimtalk.cloud.toast.com.bd/alimtalk/v2.3/appkeys/' . urlencode( $api_key ) . '/messages',
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING       => '',
                 CURLOPT_MAXREDIRS      => 10,
@@ -168,12 +170,35 @@ class Create_Update_Order {
     public function get_order_data( $order ) {
         // Get order ID
         $order_id = $order->get_id();
+        $this->put_api_response_data( 'Order ID: ' . $order_id );
+
+        // Get order items
+        $_line_items = $order->get_items();
+
+        $products = [];
+        foreach ( $_line_items as $key => $value ) {
+
+            // Get item data
+            $_item_data = $value->get_data();
+
+            // Get product name and quantity
+            $products['product_name'] = $_item_data['name'];
+            $products['quantity']     = $_item_data['quantity'];
+        }
+
         // Get order content from WordPress options table
         $order_content = get_option( '_order_content_' . $order_id ) ?? '';
+
+        // Get tracking number (assuming you're using a meta field)
+        $tracking_number = get_post_meta( $order_id, '_tracking_number', true );
+
         return [
             'order_number'        => $order->get_order_number(),
             'order_total'         => $order->get_total(),
             'order_content'       => $order_content,
+            'product_name'        => $products['product_name'],
+            'product_quantity'    => $products['product_quantity'],
+            'tracking_number'     => $tracking_number,
             'billing_first_name'  => $order->get_billing_first_name(),
             'billing_last_name'   => $order->get_billing_last_name(),
             'billing_address_1'   => $order->get_billing_address_1(),

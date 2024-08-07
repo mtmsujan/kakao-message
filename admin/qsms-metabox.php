@@ -105,17 +105,17 @@ if ( class_exists( 'CSF' ) ) {
                 'fields' => array(
                     // Parameter key field
                     array(
-                        'id'          => 'qsms_custom_content',
-                        'type'        => 'text',
-                        'title'       => 'Content',
-                        'placeholder' => 'Content',
-                    ),
-                    // Parameter key field
-                    array(
                         'id'          => 'qsms_param_key',
                         'type'        => 'text',
                         'title'       => 'Parameter Key',
                         'placeholder' => 'Parameter Key',
+                    ),
+                    // Custom parameter value field
+                    array(
+                        'id'          => 'qsms_custom_param_value',
+                        'type'        => 'text',
+                        'title'       => 'Custom Parameter value',
+                        'placeholder' => 'Custom Parameter value',
                     ),
                     // Parameter value field
                     array(

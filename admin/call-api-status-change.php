@@ -182,8 +182,8 @@ class Create_Update_Order {
             $_item_data = $value->get_data();
 
             // Get product name and quantity
-            $products['product_name'] = $_item_data['name'];
-            $products['quantity']     = $_item_data['quantity'];
+            $products['product_name']     = $_item_data['name'];
+            $products['product_quantity'] = $_item_data['quantity'];
         }
 
         // Get order content from WordPress options table

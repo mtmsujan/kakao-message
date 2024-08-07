@@ -71,7 +71,7 @@ class Create_Update_Order {
             // Call API with selected post data
             $call_api = $this->call_api( $order_id, $selected_post );
             // Log API response
-            $this->put_api_response_data( 'Call API: ' . $call_api );
+            // $this->put_api_response_data( 'Call API: ' . $call_api );
         }
     }
 
@@ -110,12 +110,34 @@ class Create_Update_Order {
 
         // Loop through params to generate template parameters
         foreach ( $qsms_params as $param ) {
-            $param_key                       = $param['qsms_param_key'];
-            $param_value                     = $order_data[$param['qsms_param_value']] ?? '';
+
+            // Get parameter key
+            $param_key = $param['qsms_param_key'];
+
+            // Get custom parameter value
+            $custom_param_value = $param['qsms_custom_param_value'] ?? '';
+            // Get dropdown parameter value
+            $dropdown_param_value = $order_data[$param['qsms_param_value']] ?? '';
+
+            // Define parameter value
+            $param_value = '';
+
+            /**
+             * Check if custom parameter value exists.
+             * set it as $param_value otherwise use dropdown parameter value
+             */
+            if ( !empty( $custom_param_value ) ) {
+                $param_value = $custom_param_value;
+            } else {
+                $param_value = $dropdown_param_value;
+            }
+
+            // Generate template parameters
             $template_parameters[$param_key] = $param_value;
         }
 
-        $this->put_api_response_data( 'Template Parameters: ' . json_encode( $template_parameters ) );
+        // Put template parameters to log file
+        // $this->put_api_response_data( 'Template Parameters: ' . json_encode( $template_parameters ) );
 
         // Get api credentials
         $api_key    = get_option( 'kakao_api_key' ) ?? '';
@@ -138,7 +160,7 @@ class Create_Update_Order {
         curl_setopt_array(
             $curl,
             [
-                CURLOPT_URL            => 'https://api-alimtalk.cloud.toast.com.bd/alimtalk/v2.3/appkeys/' . urlencode( $api_key ) . '/messages',
+                CURLOPT_URL            => 'https://api-alimtalk.cloud.toast.com/alimtalk/v2.3/appkeys/' . urlencode( $api_key ) . '/messages',
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING       => '',
                 CURLOPT_MAXREDIRS      => 10,

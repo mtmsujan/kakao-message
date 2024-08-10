@@ -212,7 +212,7 @@ class Create_Update_Order {
         $order_content = get_option( '_order_content_' . $order_id ) ?? '';
 
         // Get tracking number (assuming you're using a meta field)
-        $tracking_number = get_post_meta( $order_id, '_tracking_number', true );
+        $tracking_link = get_post_meta( $order_id, '_tracking_number', true );
 
         return [
             'order_number'        => $order->get_order_number(),
@@ -220,7 +220,7 @@ class Create_Update_Order {
             'order_content'       => $order_content,
             'product_name'        => $products['product_name'],
             'product_quantity'    => $products['product_quantity'],
-            'tracking_number'     => $tracking_number,
+            'tracking_link'       => $tracking_link,
             'billing_first_name'  => $order->get_billing_first_name(),
             'billing_last_name'   => $order->get_billing_last_name(),
             'billing_address_1'   => $order->get_billing_address_1(),

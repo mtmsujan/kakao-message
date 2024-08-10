@@ -36,7 +36,7 @@ if ( class_exists( 'CSF' ) ) {
         'order_content'       => 'Order Content',
         'product_name'        => 'Product Name',
         'product_quantity'    => 'Product Quantity',
-        'tracking_number'     => 'Tracking Number',
+        'tracking_link'       => 'Tracking Link',
         'billing_first_name'  => 'Billing First Name',
         'billing_last_name'   => 'Billing Last Name',
         'billing_address_1'   => 'Billing Address 1',

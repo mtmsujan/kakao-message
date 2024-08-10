@@ -23,10 +23,12 @@ if ( class_exists( 'CSF' ) ) {
 
     // Convert order statuses to a format suitable for dropdown
     $status_options = array();
-    foreach ( $order_statuses as $status_key => $status_label ) {
-        $status_key                  = str_replace( 'wc-', '', $status_key ); // Remove 'wc-' prefix
-        $status_label                = translate( $status_label );
-        $status_options[$status_key] = $status_label;
+    if ( !empty( $order_statuses ) && is_array( $order_statuses ) ) {
+        foreach ( $order_statuses as $status_key => $status_label ) {
+            $status_key                  = str_replace( 'wc-', '', $status_key ); // Remove 'wc-' prefix
+            $status_label                = translate( $status_label );
+            $status_options[$status_key] = $status_label;
+        }
     }
 
     // Generate order data array
@@ -131,28 +133,4 @@ if ( class_exists( 'CSF' ) ) {
         ),
     ) );
 
-}
-
-function put_api_response_data( $data ) {
-    // Ensure directory exists to store response data
-    $directory = QATA_MESSAGE_PLUGIN_PATH . '/api_response/';
-    if ( !file_exists( $directory ) ) {
-        mkdir( $directory, 0777, true );
-    }
-
-    // Construct file path for response data
-    $fileName = $directory . 'response.log';
-
-    // Get the current date and time
-    $current_datetime = date( 'Y-m-d H:i:s' );
-
-    // Append current date and time to the response data
-    $data = $data . ' - ' . $current_datetime;
-
-    // Append new response data to the existing file
-    if ( file_put_contents( $fileName, $data . "\n\n", FILE_APPEND | LOCK_EX ) !== false ) {
-        return "Data appended to file successfully.";
-    } else {
-        return "Failed to append data to file.";
-    }
 }

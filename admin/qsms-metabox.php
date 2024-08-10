@@ -9,7 +9,7 @@ if ( class_exists( 'CSF' ) ) {
     // Get WooCommerce order statuses
     $order_statuses = get_option( '_wc_order_statuses' ) ?? array();
     // Decode to array
-    $order_statuses = json_decode( $order_statuses );
+    $order_statuses = json_decode( $order_statuses, true );
 
     // Prefix
     $prefix = '_qata_message';

@@ -1,0 +1,25 @@
+Order ID: 8422 - 2024-08-10 09:07:39
+
+Tracking Items: 
+[
+    {
+        "tracking_provider": "CJ Logistics",
+        "custom_tracking_provider": "",
+        "custom_tracking_link": "",
+        "tracking_number": "540035901526",
+        "tracking_product_code": "",
+        "date_shipped": "",
+        "products_list": "",
+        "status_shipped": "1",
+        "tracking_id": ""
+    }
+] - 2024-08-10 09:07:39
+
+Template Parameters: 
+{
+    "ORDER_NUMBER": "8422",
+    "ORDER_TOTAL": "29300",
+    "ORDER_QUANTITY": 1,
+    "TRACKING_LINK": "https://trace.cjlogistics.com/next/tracking.html?wblNo=540035901526"
+} - 2024-08-10 09:07:39
+

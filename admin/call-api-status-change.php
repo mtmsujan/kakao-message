@@ -192,7 +192,7 @@ class Create_Update_Order {
     public function get_order_data( $order ) {
         // Get order ID
         $order_id = $order->get_id();
-        $this->put_api_response_data( 'Order ID: ' . $order_id );
+        // $this->put_api_response_data( 'Order ID: ' . $order_id );
 
         // Get order items
         $_line_items = $order->get_items();
@@ -211,20 +211,29 @@ class Create_Update_Order {
         // Get order content from WordPress options table
         $order_content = get_option( '_order_content_' . $order_id ) ?? '';
 
-        $tracking_number = null;
         // Get tracking items
         $tracking_items = $order->get_meta( '_wc_shipment_tracking_items', true );
+        // $this->put_api_response_data( 'Tracking Items: ' . json_encode( $tracking_items ) );
+
+        // Define tracking link
+        $tracking_number = null;
+
+        // Loop through tracking items to get tracking number
         if ( !empty( $tracking_items ) && is_array( $tracking_items ) ) {
             foreach ( $tracking_items as $tracking_item ) {
                 $tracking_number = $tracking_item['tracking_number'];
             }
         }
 
+        // Define tracking link
         $tracking_link = null;
+
+        // Generate tracking link
         if ( !empty( $tracking_number ) ) {
             $tracking_link = sprintf( "https://trace.cjlogistics.com/next/tracking.html?wblNo=%d", $tracking_number );
         }
 
+        // Generate order data array
         return [
             'order_number'        => $order->get_order_number(),
             'order_total'         => $order->get_total(),

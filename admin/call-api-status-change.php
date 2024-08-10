@@ -137,7 +137,7 @@ class Create_Update_Order {
         }
 
         // Put template parameters to log file
-        // $this->put_api_response_data( 'Template Parameters: ' . json_encode( $template_parameters ) );
+        $this->put_api_response_data( 'Template Parameters: ' . json_encode( $template_parameters ) );
 
         // Get api credentials
         $api_key    = get_option( 'kakao_api_key' ) ?? '';
@@ -211,8 +211,19 @@ class Create_Update_Order {
         // Get order content from WordPress options table
         $order_content = get_option( '_order_content_' . $order_id ) ?? '';
 
-        // Get tracking number (assuming you're using a meta field)
-        $tracking_link = get_post_meta( $order_id, '_tracking_number', true );
+        $tracking_number = null;
+        // Get tracking items
+        $tracking_items = $order->get_meta( '_wc_shipment_tracking_items', true );
+        if ( !empty( $tracking_items ) && is_array( $tracking_items ) ) {
+            foreach ( $tracking_items as $tracking_item ) {
+                $tracking_number = $tracking_item['tracking_number'];
+            }
+        }
+
+        $tracking_link = null;
+        if ( !empty( $tracking_number ) ) {
+            $tracking_link = sprintf( "https://trace.cjlogistics.com/next/tracking.html?wblNo=%d", $tracking_number );
+        }
 
         return [
             'order_number'        => $order->get_order_number(),

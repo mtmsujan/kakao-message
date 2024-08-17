@@ -142,6 +142,7 @@ class Create_Update_Order {
         // Get api credentials
         $api_key    = get_option( 'kakao_api_key' ) ?? '';
         $sender_key = get_option( 'kakao_sender_key' ) ?? '';
+        $secret_key = get_option( 'kakao_secret_key' ) ?? '';
 
         // Prepare payload for API request
         $payload = json_encode( [
@@ -171,7 +172,7 @@ class Create_Update_Order {
                 CURLOPT_POSTFIELDS     => $payload,
                 CURLOPT_HTTPHEADER     => [
                     'Content-Type: application/json;charset=UTF-8',
-                    'X-Secret-Key: pbEwaOWl',
+                    'X-Secret-Key: ' . $secret_key,
                 ],
             ]
         );

@@ -32,6 +32,7 @@
   $("#save").on("click", function () {
     var apiKey = $("#api_key").val();
     var senderKey = $("#sender_key").val();
+    var secretKey = $("#secret_key").val();
 
     $.ajax({
       url: kakaoSettings.ajax_url,
@@ -40,6 +41,7 @@
         action: "save_kakao_settings",
         api_key: apiKey,
         sender_key: senderKey,
+        secret_key: secretKey,
         nonce: kakaoSettings.nonce,
       },
       success: function (response) {

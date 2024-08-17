@@ -24,10 +24,13 @@ class Settings_Page {
 
     public function enqueue_scripts() {
         wp_enqueue_script( 'kakao-settings-js', plugin_dir_url( __FILE__ ) . 'js/qata-message-admin.js', array( 'jquery' ), null, true );
-        wp_localize_script( 'kakao-settings-js', 'kakaoSettings', array(
-            'ajax_url' => admin_url( 'admin-ajax.php' ),
-            'nonce'    => wp_create_nonce( 'kakao_settings_nonce' ),
-        )
+        wp_localize_script(
+            'kakao-settings-js',
+            'kakaoSettings',
+            array(
+                'ajax_url' => admin_url( 'admin-ajax.php' ),
+                'nonce'    => wp_create_nonce( 'kakao_settings_nonce' ),
+            )
         );
     }
 
@@ -44,7 +47,8 @@ class Settings_Page {
             }
 
             .api_key,
-            .sender_key {
+            .sender_key,
+            .secret_key {
                 display: block;
                 margin-bottom: 20px;
                 gap: 30px;
@@ -72,6 +76,12 @@ class Settings_Page {
                         <input type="password" class="widefat kakao-input" placeholder="Sender Key" name="sender_key"
                             id="sender_key" value="<?php echo esc_attr( get_option( 'kakao_sender_key' ) ); ?>">
                     </div>
+
+                    <div class="secret_key">
+                        <label for="secret_key"><?php esc_html_e( 'Secret Key:', 'qata-message' ) ?></label>
+                        <input type="password" class="widefat kakao-input" placeholder="Secret Key" name="secret_key"
+                            id="secret_key" value="<?php echo esc_attr( get_option( 'kakao_secret_key' ) ); ?>">
+                    </div>
                 </div>
 
                 <input type="button" class="button button-primary" id="save" value="Save">
@@ -90,9 +100,11 @@ class Settings_Page {
 
         $api_key    = sanitize_text_field( $_POST['api_key'] );
         $sender_key = sanitize_text_field( $_POST['sender_key'] );
+        $secret_key = sanitize_text_field( $_POST['secret_key'] );
 
         update_option( 'kakao_api_key', $api_key );
         update_option( 'kakao_sender_key', $sender_key );
+        update_option( 'kakao_secret_key', $secret_key );
 
         wp_send_json_success( 'Settings saved' );
     }

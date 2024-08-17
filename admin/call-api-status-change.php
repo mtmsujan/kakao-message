@@ -87,7 +87,7 @@ class Create_Update_Order {
     }
 
     // Call external API with order and message data
-    public function call_api( $order_id, $message ) {
+    public function call_api( $order_id, $selected_post ) {
         // Get WooCommerce order object
         $order = wc_get_order( $order_id );
 
@@ -101,7 +101,7 @@ class Create_Update_Order {
         $template_parameters = [];
 
         // Get post type data
-        $metabox_values = get_post_meta( $message->ID, '_qata_message', true );
+        $metabox_values = get_post_meta( $selected_post->ID, '_qata_message', true );
         // Get repeater field data
         $qsms_params = $metabox_values['qsms_params'];
 

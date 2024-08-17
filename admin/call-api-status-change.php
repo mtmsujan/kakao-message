@@ -137,7 +137,7 @@ class Create_Update_Order {
         }
 
         // Put template parameters to log file
-        $this->put_api_response_data( 'Template Parameters: ' . json_encode( $template_parameters ) );
+        // $this->put_api_response_data( 'Template Parameters: ' . json_encode( $template_parameters ) );
 
         // Get api credentials
         $api_key    = get_option( 'kakao_api_key' ) ?? '';
@@ -260,7 +260,8 @@ class Create_Update_Order {
             'shipping_postcode'   => $order->get_shipping_postcode(),
             'shipping_country'    => $order->get_shipping_country(),
             'customer_note'       => $order->get_customer_note(),
-            'payment_method'      => $order->get_payment_method(),
+            // 'payment_method'      => $order->get_payment_method(),
+            'payment_method'      => $order->get_payment_method_title(),
             'transaction_id'      => $order->get_transaction_id(),
             'order_date'          => $order->get_date_created()->date( 'Y-m-d H:i:s' ),
             'order_status'        => $order->get_status(),
